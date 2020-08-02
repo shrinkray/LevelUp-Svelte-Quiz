@@ -5,8 +5,8 @@
   let isCorrect;
   let isAnswered = false;
 
-  // the Map method makes a new array from an old array. It does not change the old array.
-  // Here it is taking in the incorrect answers from the API and returning an object of the string plus a correct key.
+  // Iterates over the items in an array and creates a new array.  It does not change the old array.
+  // Here it is taking in the incorrect answers from the API and returning an array of the incorrect answers.
   let answers = question.incorrect_answers.map((answer) => {
     return {
       answer,
@@ -14,7 +14,7 @@
     };
   });
 
-  // Collects all answer values into an array. We're using spread as a quick method
+  // Appends the incorrect answers to our correct answer.
   let allAnswers = [
     ...answers,
     {
@@ -24,7 +24,7 @@
   ];
   shuffle(allAnswers);
 
-  // Shuffle is pretty cool. This trick assigns and sorts for a number between -1 and 1
+  // Shuffle is pretty cool. Not the most random, but good enough for what this is. This assigns and sorts for a number between 0 to 1 by subtracting 0.5 from it, our result range is: -0.5 and 0.5.
   function shuffle(array) {
     array.sort(() => Math.random() - 0.5);
   }
@@ -41,14 +41,20 @@
   {@html question.question}
 </h3>
 
-<!-- Presents response aligned with correct or incorrect answer -->
+<!-- Presents response aligned with correct or incorrect answer 
+ When the answer is correct, the next quesiton button appears. 
+  The templating framework is more explicit. We could use a terary but this form is more explicit. 
+-->
 {#if isAnswered}
   <h4>
     {#if isCorrect}You got it right{:else}You goofed up{/if}
   </h4>
 {/if}
 
-<!-- Displays answers as a button. The second item is a cheat for testing false and correct answers. Comment out to keep us honest. -->
+<!-- Displays answers as a button. The second item is a cheat for testing false and correct answers. Comment out to keep us honest. 
+
+We'e running an arrow function if the question is correct. And created a new function called correctQuestion() where if correct something fun will happen. 
+-->
 
 {#each allAnswers as answer}
   <button on:click={() => checkQuestion(answer.correct)}>
@@ -56,6 +62,7 @@
     {@html answer.correct}
   </button>
 {/each}
+
 {#if isCorrect}
   <div>
     <button on:click={nextQuestion}>Next Question</button>
