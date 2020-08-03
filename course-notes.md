@@ -201,6 +201,8 @@ This lesson is getting into the visual animation areas, something I enjoy. Trans
 </div>
 ```
 
+## 15. Reactive Expressions
+
 ### Reactive statements
 
 Adds logic to the application. Place this within the <script></script> area
@@ -212,26 +214,61 @@ $: if (score > 1) {
 }
 ```
 
+### Reactive Declarations
+
 A technique to make the code cleaner
 
 ```js
-// Reactive Declartation
 $: questionNumber = activeQuestion + 1;
-```
-
-## 15. Reactive Expressions
-
-Now we will take a look at lifecycles in Svelte. The lifecycle methods we will cover are onMount, beforeUpdate, afterUpdate and onDestroy.
-
-```js
 ```
 
 ## 16. Component Lifecycle
 
+Now we will take a look at lifecycles in Svelte. The lifecycle methods we will cover are onMount, beforeUpdate, afterUpdate and onDestroy.
+
+### onMount
+
+_Run callback when lifecycle run. Only on clientside, (not serverside)._
+
 ```js
+import { onMount } from "svelte";
+
+...
+// onMount Function with Call Back Function that fires when condition met
+onMount( () => {
+  console.log(`I Mounted!`);
+})
+
+
 ```
 
+The next lifecycle items are beforeUpdate, afterUpdate, and onDestroy. The onDestroy function is used _after_ the app is unmounted.
+
+```js
+//
+import { onMount, beforeUpdate, afterUpdate, onDestroy } from "svelte";
+
+onMount( () => {
+  console.log(`I Mounted!`);
+})
+
+beforeUpdate( () => {
+  console.log(`before update`);
+})
+
+afterUpdate( () => {
+  console.log(`after update`);
+})
+...
+// the onMount is considered an update, so we see that in the console log.
+
+```
+
+If we click Start a new quiz button, the log would show `before update` and `after update` but not mounted.
+
 ## 17. Directive Modifiers & the Class Directive
+
+Next up is Svelte events. We will cover shorthands to make life easier for both the ‘on’ and ‘class’ event directives.
 
 ```js
 ```

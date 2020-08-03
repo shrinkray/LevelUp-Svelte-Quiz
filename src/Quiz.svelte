@@ -4,6 +4,8 @@
   // allows an exported variable to be over written in another file.
 
   import { fade, blur, fly, slide, scale } from 'svelte/transition';
+  import { onMount, beforeUpdate, afterUpdate, onDestroy } from 'svelte';
+
   import Question from './Question.svelte';
 
   let quiz = getQuiz();
@@ -34,10 +36,22 @@
     score = score + 1;
   }
   // Reactive Statement
-  $: if (score > 1) {
+  $: if (score > 7) {
     alert('You won!');
     resetQuiz();
   }
+
+  onMount(() => {
+    console.log(`I Mounted!`);
+  });
+
+  beforeUpdate(() => {
+    console.log(`before update`);
+  });
+
+  afterUpdate(() => {
+    console.log(`after update`);
+  });
 
   // Reactive Declartation
   $: questionNumber = activeQuestion + 1;
