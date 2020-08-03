@@ -3,7 +3,8 @@
   // Here getting an awareness of the templating varables and how a value set with let vs const
   // allows an exported variable to be over written in another file.
 
-  import Question from "./Question.svelte";
+  import { fade, blur, fly, slide, scale } from 'svelte/transition';
+  import Question from './Question.svelte';
 
   let quiz = getQuiz();
   let activeQuestion = 0;
@@ -11,41 +12,71 @@
 
   async function getQuiz() {
     const res = await fetch(
-      "https://opentdb.com/api.php?amount=10&category=27&difficulty=hard"
+      'https://opentdb.com/api.php?amount=10&category=27&difficulty=hard'
     );
     const quiz = await res.json();
     return quiz;
   }
 
-  function handleClick() {
-    quiz = getQuiz();
-  }
+  // Function to advance to the next question
+  // Scott's thought is that this form is more readable than ...
+  // activeQueston +=
 
   function nextQuestion() {
     activeQuestion = activeQuestion + 1;
   }
-  function resetScore() {
+  function resetQuiz() {
     score = 0;
+    activeQuestion = 0;
+    quiz = getQuiz();
   }
   function addToScore() {
     score = score + 1;
   }
+  // Reactive Statement
+  $: if (score > 1) {
+    alert('You won!');
+    resetQuiz();
+  }
+
+  // Reactive Declartation
+  $: questionNumber = activeQuestion + 1;
 </script>
 
+<style>
+  .fade-wrapper {
+    position: absolute;
+  }
+</style>
+
+<!-- INTERFACE OF THE PAGE 
+  * Main Quiz Button
+  * Score and a basic question number.
+-->
 <div>
 
-  <button on:click={handleClick}>Start New Quiz</button>
+  <button on:click={nextQuestion}>Start New Quiz</button>
 
   <h3>My Score: {score}</h3>
-  <h4>Question #{activeQuestion + 1}</h4>
+  <h4>Question #{questionNumber}</h4>
 
+  <!-- This is cool, it awaits until the info is loaded then show the data. Nice.  -->
   {#await quiz}
     Loading...
   {:then data}
 
+    <!-- Adding new index ( it is not a keyword and could be anything, like a letter or other word. Index is the first parameter.  ) 
+  
+    This if section makes it so we only show one question at a time. 
+  -->
+
     {#each data.results as question, index}
       {#if index === activeQuestion}
-        <Question {addToScore} {nextQuestion} {question} />
+        <!-- This is an example of passing a function down into our Question.svelte component -->
+
+        <div in:fly={{ x: 100 }} out:fly={{ x: -200 }} class="fade-wrapper">
+          <Question {addToScore} {nextQuestion} {question} />
+        </div>
       {/if}
     {/each}
 

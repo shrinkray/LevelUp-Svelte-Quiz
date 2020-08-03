@@ -180,12 +180,48 @@ We will add things such as scoring and updating the interface so that only the a
 ```js
 ```
 
+Switched some commenting to the components themselves. The page is shaping up but there is a lot more to do to make it look nice.
+
 ## 14. Animated Transitions
 
+We will take a look at transitions. Svelte comes with built-in animations that will make it quick and easy to set up transitions between our quiz questions.
+
+This lesson is getting into the visual animation areas, something I enjoy. Transitions are part of Svelte so we import them into our component. The work is happening on the Quiz.svelte component.
+
 ```js
+// Yeah, these are introduced just like this, missing is the draw transition.
+ import { fade, blur, fly, slide, scale } from 'svelte/transition';
+
+...
+
+// A transition is applied as a directive in html. We're dealing with the questions appearing and disappearing. A div wrapper is added to the Question statement. A style adjusts positioning.
+
+<div transition:blur class="fade-wrapper">
+    <Question {addToScore} {nextQuestion} {question} />
+</div>
+```
+
+### Reactive statements
+
+Adds logic to the application. Place this within the <script></script> area
+
+```js
+$: if (score > 1) {
+  alert('You won!');
+  resetQuiz();
+}
+```
+
+A technique to make the code cleaner
+
+```js
+// Reactive Declartation
+$: questionNumber = activeQuestion + 1;
 ```
 
 ## 15. Reactive Expressions
+
+Now we will take a look at lifecycles in Svelte. The lifecycle methods we will cover are onMount, beforeUpdate, afterUpdate and onDestroy.
 
 ```js
 ```

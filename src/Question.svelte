@@ -1,6 +1,7 @@
 <script>
   export let question;
   export let nextQuestion;
+  export let addToScore;
 
   let isCorrect;
   let isAnswered = false;
@@ -31,8 +32,14 @@
 
   // When the correct answer is clicked, assign isAnswered and isCorrect values
   function checkQuestion(correct) {
-    isAnswered = true;
-    isCorrect = correct;
+    if (!isAnswered) {
+      isAnswered = true;
+      isCorrect = correct;
+
+      if (correct) {
+        addToScore();
+      }
+    }
   }
 </script>
 
@@ -57,13 +64,13 @@ We'e running an arrow function if the question is correct. And created a new fun
 -->
 
 {#each allAnswers as answer}
-  <button on:click={() => checkQuestion(answer.correct)}>
+  <button disabled={isAnswered} on:click={() => checkQuestion(answer.correct)}>
     {@html answer.answer}
     {@html answer.correct}
   </button>
 {/each}
 
-{#if isCorrect}
+{#if isAnswered}
   <div>
     <button on:click={nextQuestion}>Next Question</button>
   </div>
