@@ -270,10 +270,62 @@ If we click Start a new quiz button, the log would show `before update` and `aft
 
 Next up is Svelte events. We will cover shorthands to make life easier for both the ‘on’ and ‘class’ event directives.
 
+A terrific toolkit for setting html CSS classes through conditional statements.
+
+### Eventname Modifiers. See: [Svelte Docs](https://svelte.dev/docs#class_name)
+
+Use the `on:` directive to listen to DOM events. Make form events `preventDefault` easily without needing to add that in the JS itself.
+Join directive modifiers with the (pipe) `|`.
+
 ```js
+on: eventname = { handler };
+on: eventname | modifiers = { handler };
+```
+
+In this next example, we have `on:click|once={...}` limiting the restart of the quiz. A use case might be for an ecommerce page where you want to submit an order once.
+
+```html
+<button on:click|once="{nextQuestion}">Start New Quiz</button>
+```
+
+```html
+<form on:submit|preventDefault="{handleSubmit}">
+  <!-- the `submit` event's default is prevented,
+		 so the page won't reload -->
+</form>
+```
+
+### Classnames
+
+Using `class:` as a directive, there are many forms to deploy.
+
+```html
+...
+<!-- These are equivilent  -->
+  <h4 class={isCorrect ? 'correct' : 'wrong' } >
+    {#if isCorrect}You got it right{:else}You goofed up{/if}
+  </h4>
+
+  <h4 class:isCorrect={isCorect} >
+    {#if isCorrect}You got it right{:else}You goofed up{/if}
+  </h4>
+  ...
+
+  <!-- shorthand when the classname is `isCorrect` -->
+  <h4 class:isCorrect >
+    {#if isCorrect}You got it right{:else}You goofed up{/if}
+  </h4>
+
+  <!-- might set multiple classnames -->
+  <h4 class:isCorrect class:inactive={!active} >
+    {#if isCorrect}You got it right{:else}You goofed up{/if}
+  </h4>
+
 ```
 
 ## 18. Making a Model With Slots
+
+With slots, we have the ability to dynamically insert a component inside another one. We will take our new knowledge of slots to easily make a Modal for the alert box we created earlier.
 
 ```js
 ```
