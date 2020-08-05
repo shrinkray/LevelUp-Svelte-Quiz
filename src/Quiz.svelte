@@ -5,12 +5,13 @@
 
   import { fade, blur, fly, slide, scale } from 'svelte/transition';
   import { onMount, beforeUpdate, afterUpdate, onDestroy } from 'svelte';
-
   import Question from './Question.svelte';
+  import Modal from './Modal.svelte';
 
   let quiz = getQuiz();
   let activeQuestion = 0;
   let score = 0;
+  let isModalOpen = false;
 
   async function getQuiz() {
     const res = await fetch(
@@ -28,6 +29,7 @@
     activeQuestion = activeQuestion + 1;
   }
   function resetQuiz() {
+    isModalOpen = false;
     score = 0;
     activeQuestion = 0;
     quiz = getQuiz();
@@ -37,8 +39,7 @@
   }
   // Reactive Statement
   $: if (score > 7) {
-    alert('You won!');
-    resetQuiz();
+    isModalOpen = true;
   }
 
   onMount(() => {
@@ -97,3 +98,12 @@
   {/await}
 
 </div>
+
+{#if isModalOpen}
+  <Modal>
+    <h2>You Won!</h2>
+    <p>Congratulations!</p>
+
+    <button on:click={resetQuiz}>Start Over</button>
+  </Modal>
+{/if}

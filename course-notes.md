@@ -327,7 +327,55 @@ Using `class:` as a directive, there are many forms to deploy.
 
 With slots, we have the ability to dynamically insert a component inside another one. We will take our new knowledge of slots to easily make a Modal for the alert box we created earlier.
 
+Added new Modal.svelte component
+
+```html
+<!-- Modal.svelte component takes scripts, styles, and elements relating to its style and behaivor -->
+
+<script>
+  // transition styles
+  import { blur, fade, fly, slide, scale } from 'svelte/transition';
+</script>
+
+<style>
+  /* modal styles */
+</style>
+
+<!-- Inside the div of the Modal, add a <slot /> element -->
+<div class="modal-wrapper" transition:fade>
+  <div class="modal" transition:scale>
+    <button>Close</button>
+    <!-- <slot> optional fallback </slot> -->
+    <slot />
+    <!-- <slot name="modal" /> This did not work! -->
+  </div>
+</div>
+
+<!-- Hit errors on naming Slots, but there are different ways to target them. -->
+```
+
 ```js
+<!-- In Quiz.svelte -->
+
+<!-- Removing the alert and triggering isModalOpen boolean
+isModalOpen becomes true when we get x questions right.
+Then it is reset when we restart the quiz
+-->
+ import Modal from './Modal.svelte';
+ let isModalOpen = false;
+ ...
+```
+
+```html
+{#if isModalOpen}
+<!--  The Modal element is associated to the Modal component -->
+<Modal>
+  <h2>You Won!</h2>
+  <p>Congratulations!</p>
+
+  <button on:click="{resetQuiz}">Start Over</button>
+</Modal>
+{/if}
 ```
 
 ## 19. Component Events & Dimensions
